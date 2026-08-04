@@ -1,0 +1,35 @@
+[project]
+name = "tasker"
+version = "0.1.0"
+description = "Production grade Todo API built with FastAPI."
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi==0.115.6",          # web framework
+    "uvicorn[standard]==0.34.0", # ASGI server that runs the app
+    "sqlmodel==0.0.22",          # SQLAlchemy + Pydantic: tables AND schemas
+    "pydantic==2.10.4",          # validation / serialization
+    "pydantic-settings==2.7.0",  # typed config from the environment
+    "psycopg[binary]==3.2.3",    # PostgreSQL driver
+    "alembic==1.14.0",           # database migrations
+]
+
+[dependency-groups]
+dev = [
+    "pytest==8.3.4",             # test runner
+    "httpx==0.28.1",             # test client / async HTTP
+    "ruff==0.8.4",               # linter + formatter
+    "mypy==1.14.0",              # static type checker
+]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+# A pragmatic, strict-ish rule set. E/F=pyflakes/pycodestyle, I=isort,
+# B=bugbear, UP=pyupgrade, SIM=simplify.
+select = ["E", "F", "I", "B", "UP", "SIM"]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]
