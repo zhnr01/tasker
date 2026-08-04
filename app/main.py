@@ -28,7 +28,7 @@ def create_app() -> FastAPI:
     app = FastAPI(
         title="tasker",
         version=__version__,
-        summary="A production-grade Todo API, rebuilt from the Go tasker.",
+        summary="A production-grade Todo API, rebuilt from first principles.",
         lifespan=lifespan,
     )
 
