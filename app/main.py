@@ -4,6 +4,7 @@ from fastapi import FastAPI
 
 from app import __version__
 from app.api.routes import health
+from app.config import get_settings
 
 
 @asynccontextmanager
@@ -25,17 +26,18 @@ def create_app() -> FastAPI:
     Everything the app needs (routers, middleware, error handlers) gets attached
     here, so there's exactly one place that describes the whole application.
     """
+    settings = get_settings()  # built & validated once, here at startup
     app = FastAPI(
-        title="tasker",
+        title=settings.PROJECT_NAME,
         version=__version__,
-        summary="A production-grade Todo API, rebuilt from first principles.",
+        summary="A production-grade Todo API, rebuilt from the Go tasker.",
+        debug=settings.DEBUG,
         lifespan=lifespan,
     )
 
     # Register route groups. As the app grows, new APIRouters get included here
     # (Part 05 introduces the /v1 aggregator that bundles them all).
     app.include_router(health.router)
-
     return app
 
 

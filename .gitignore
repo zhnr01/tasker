@@ -11,6 +11,9 @@ htmlcov/
 .env
 .env.*
 
+.vscode/
+
 tasker.egg-info/
 dist/
 build/
+
