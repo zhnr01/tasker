@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from app import __version__
+from app.api.router import api_router
 from app.api.routes import health
 from app.config import get_settings
 
@@ -38,6 +39,8 @@ def create_app() -> FastAPI:
     # Register route groups. As the app grows, new APIRouters get included here
     # (Part 05 introduces the /v1 aggregator that bundles them all).
     app.include_router(health.router)
+    # Everything else lives under /v1.
+    app.include_router(api_router, prefix=settings.API_V1_PREFIX)
     return app
 
 
