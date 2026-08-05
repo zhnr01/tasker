@@ -2,6 +2,7 @@ from logging.config import fileConfig
 
 from alembic import context
 from sqlalchemy import engine_from_config, pool
+from sqlmodel import SQLModel
 
 from app.config import get_settings
 
@@ -9,7 +10,6 @@ from app.config import get_settings
 # (We'll flesh these out in Parts 04, 07, 08, 20. Import-all keeps autogenerate
 #  aware of the full schema.)
 from app.models.base import BaseModel  # noqa: F401
-from sqlmodel import SQLModel
 
 config = context.config
 if config.config_file_name is not None:

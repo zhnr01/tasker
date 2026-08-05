@@ -1,8 +1,8 @@
 from collections.abc import Generator
 
+from sqlalchemy import text
 from sqlalchemy.engine import Engine
 from sqlmodel import Session, create_engine
-from sqlalchemy import text
 
 from app.config import get_settings
 
