@@ -1,3 +1,6 @@
+# Executed everytime we run the migration commands like
+# upgrade, downgrade, revision --autogenerate
+
 from logging.config import fileConfig
 
 from alembic import context

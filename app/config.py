@@ -31,7 +31,7 @@ class Settings(BaseSettings):
     # A full DSN, e.g. postgresql+psycopg://tasker:tasker@localhost:5432/tasker
     # Allow either a PostgresDsn or a plain str so static type checkers
     # won't complain when a string literal is used as the default.
-    DATABASE_URL: PostgresDsn | str = Field(
+    DATABASE_URL: PostgresDsn = Field(
         default="postgresql+psycopg://tasker:tasker@localhost:5432/tasker"
     )
     # Connection-pool tunables (used in Part 03).
