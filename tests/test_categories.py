@@ -18,4 +18,4 @@ def test_delete_category_sets_todo_category_null():
     ).json()
     assert client.delete(f"/v1/categories/{cat['id']}").status_code == 204
     refetched = client.get(f"/v1/todos/{todo['id']}").json()
-    assert refetched["category_id"] is None   # SET NULL, not cascade delete
+    assert refetched["category_id"] is None  # SET NULL, not cascade delete

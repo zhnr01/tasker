@@ -6,6 +6,7 @@ from sqlmodel import Session
 
 from app.db import get_session
 from app.services.category import CategoryService
+from app.services.comment import CommentService
 from app.services.todo import TodoService
 
 # --- Auth stand-in --------------------------------------------------------
@@ -37,6 +38,14 @@ def get_category_service(
 ) -> CategoryService:
     return CategoryService(session)
 
+
+def get_comment_service(
+    session: Annotated[Session, Depends(get_session)],
+) -> CommentService:
+    return CommentService(session)
+
+
+CommentServiceDep = Annotated[CommentService, Depends(get_comment_service)]
 
 # --- Reusable annotated types (clean route signatures) ---------------------
 CurrentUserId = Annotated[uuid.UUID, Depends(get_current_user_id)]

@@ -103,3 +103,22 @@ class CategoryRead(BaseModel):
     description: str | None
     created_at: datetime
     updated_at: datetime
+
+
+class CommentCreate(BaseModel):
+    content: str = Field(min_length=1, max_length=2000)
+
+
+class CommentUpdate(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    content: str = Field(min_length=1, max_length=2000)
+
+
+class CommentRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: uuid.UUID
+    todo_id: uuid.UUID
+    user_id: uuid.UUID
+    content: str
+    created_at: datetime
+    updated_at: datetime
