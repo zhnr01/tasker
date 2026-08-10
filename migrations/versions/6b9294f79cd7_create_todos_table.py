@@ -14,7 +14,7 @@ from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
 revision: str = "6b9294f79cd7"
-down_revision: str | None = "d4adeec0c0d9"
+down_revision: str | None = "721ee09154cf"
 branch_labels: str | Sequence[str] | None = None
 depends_on: str | Sequence[str] | None = None
 
@@ -56,12 +56,20 @@ def upgrade() -> None:
         sa.ForeignKeyConstraint(["parent_todo_id"], ["todos.id"]),
         # Deleting a category just un-categorizes its todos (SET NULL),
         # exactly like the Go schema.
-        # sa.ForeignKeyConstraint(
-        #     ["category_id"], ["todo_categories.id"], ondelete="SET NULL"
-        # ),
+        sa.ForeignKeyConstraint(
+            ["category_id"], ["todo_categories.id"], ondelete="SET NULL"
+        ),
     )
     # A todo can't be its own parent (matches the Go 'no_self_parent' constraint).
     op.create_check_constraint("no_self_parent", "todos", "id != parent_todo_id")
+    op.create_foreign_key(
+        "fk_todos_category",
+        "todos",
+        "todo_categories",
+        ["category_id"],
+        ["id"],
+        ondelete="SET NULL",
+    )
 
     # Indexes matching 002_todos.sql (query-driven, not guesswork).
     op.create_index("idx_todos_user_id", "todos", ["user_id"])

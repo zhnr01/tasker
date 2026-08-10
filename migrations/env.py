@@ -13,6 +13,8 @@ from app.config import get_settings
 # (We'll flesh these out in Parts 04, 07, 08, 20. Import-all keeps autogenerate
 #  aware of the full schema.)
 from app.models.base import BaseModel  # noqa: F401
+from app.models.category import TodoCategory  # noqa: F401
+from app.models.todo import Todo  # noqa: F401
 
 config = context.config
 if config.config_file_name is not None:

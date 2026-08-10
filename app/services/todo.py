@@ -2,22 +2,31 @@ import uuid
 
 from sqlmodel import Session
 
+from app.models.schemas import TodoCreate, TodoUpdate
 from app.models.todo import Todo
 from app.repositories.todo import TodoRepository
 
 
 class TodoService:
-    """Business rules & orchestration for todos.
-
-    The service is where policy lives: 'a missing todo is an error', 'completing a
-    todo stamps completed_at', 'stats are cached'. It calls the repository for
-    persistence and NEVER speaks HTTP. (08-layers.md.)
-    """
-
     def __init__(self, session: Session) -> None:
         self.session = session
         self.repo = TodoRepository(session)
 
+    def create(self, *, user_id: uuid.UUID, data: TodoCreate) -> Todo:
+        # (Part 07 will validate category_id belongs to the user; Part 16 will
+        #  invalidate the stats cache here.)
+        return self.repo.create(user_id=user_id, data=data)
+
     def get(self, *, user_id: uuid.UUID, todo_id: uuid.UUID) -> Todo | None:
-        # Rule-free for now; Part 11 upgrades this to raise a typed NotFoundError.
         return self.repo.get_owned(user_id=user_id, todo_id=todo_id)
+
+    def update(
+        self, *, user_id: uuid.UUID, todo_id: uuid.UUID, data: TodoUpdate
+    ) -> Todo | None:
+        todo = self.repo.get_owned(user_id=user_id, todo_id=todo_id)
+        if todo is None:
+            return None
+        return self.repo.update(todo=todo, data=data)
+
+    def delete(self, *, user_id: uuid.UUID, todo_id: uuid.UUID) -> bool:
+        return self.repo.delete_owned(user_id=user_id, todo_id=todo_id)

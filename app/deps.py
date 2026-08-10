@@ -5,6 +5,7 @@ from fastapi import Depends
 from sqlmodel import Session
 
 from app.db import get_session
+from app.services.category import CategoryService
 from app.services.todo import TodoService
 
 # --- Auth stand-in --------------------------------------------------------
@@ -31,7 +32,14 @@ def get_todo_service(
     return TodoService(session)
 
 
+def get_category_service(
+    session: Annotated[Session, Depends(get_session)],
+) -> CategoryService:
+    return CategoryService(session)
+
+
 # --- Reusable annotated types (clean route signatures) ---------------------
 CurrentUserId = Annotated[uuid.UUID, Depends(get_current_user_id)]
 SessionDep = Annotated[Session, Depends(get_session)]
 TodoServiceDep = Annotated[TodoService, Depends(get_todo_service)]
+CategoryServiceDep = Annotated[CategoryService, Depends(get_category_service)]
