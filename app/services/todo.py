@@ -30,3 +30,6 @@ class TodoService:
 
     def delete(self, *, user_id: uuid.UUID, todo_id: uuid.UUID) -> bool:
         return self.repo.delete_owned(user_id=user_id, todo_id=todo_id)
+
+    def get_populated(self, *, user_id, todo_id) -> dict | None:
+        return self.repo.get_populated(user_id=user_id, todo_id=todo_id)

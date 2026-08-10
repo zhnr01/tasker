@@ -3,7 +3,7 @@ import uuid
 from fastapi import APIRouter, HTTPException, status
 
 from app.deps import CurrentUserId, TodoServiceDep
-from app.models.schemas import TodoCreate, TodoRead, TodoUpdate
+from app.models.schemas import TodoCreate, TodoRead, TodoReadPopulated, TodoUpdate
 
 router = APIRouter(prefix="/todos", tags=["todos"])
 
@@ -58,3 +58,16 @@ def delete_todo(
     if not service.delete(user_id=user_id, todo_id=todo_id):
         raise HTTPException(status.HTTP_404_NOT_FOUND, "Todo not found")
     # 204: intentionally return nothing.
+
+
+@router.get("/{todo_id}/populated", response_model=TodoReadPopulated)
+def get_todo_populated(
+    todo_id: uuid.UUID,
+    user_id: CurrentUserId,
+    service: TodoServiceDep,
+) -> TodoReadPopulated:
+    """Fetch a todo with its category, children (subtasks), and comments."""
+    data = service.get_populated(user_id=user_id, todo_id=todo_id)
+    if data is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Todo not found")
+    return TodoReadPopulated.model_validate(data)

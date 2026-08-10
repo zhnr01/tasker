@@ -122,3 +122,20 @@ class CommentRead(BaseModel):
     content: str
     created_at: datetime
     updated_at: datetime
+
+
+class TodoReadPopulated(TodoRead):
+    """A todo with its relations embedded (mirrors the Go populated todo).
+
+    Inherits every base field from TodoRead and adds the nested collections.
+    'children' are subtasks (todos whose parent_todo_id == this id).
+    """
+
+    category: "CategoryRead | None" = None
+    children: list["TodoRead"] = []
+    comments: list["CommentRead"] = []
+    # attachments: list[AttachmentRead] = []   # wired in Part 20
+
+
+# Pydantic needs the forward refs resolved once all classes are defined:
+TodoReadPopulated.model_rebuild()
